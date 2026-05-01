@@ -136,11 +136,11 @@
         </aside>
 
         <section class="editor" aria-label="Editor group">
-          <div class="editor-tabs" role="tablist">
-            <button class="editor-tab active">session.ai</button>
+          <div class="editor-tabs" id="editorTabs" role="tablist">
+            <div class="editor-tab active" role="tab" tabindex="0" data-tab-id="session">session.ai</div>
           </div>
 
-          <section class="workspace" aria-label="Assistant workspace">
+          <section class="workspace" id="sessionView" aria-label="Assistant workspace">
             <header class="workspace-header">
               <div>
                 <p class="eyebrow">SESSION</p>
@@ -186,6 +186,14 @@
               </div>
               <pre class="mermaid-view" id="mermaidView">構成図はまだ作成されていません。</pre>
             </section>
+          </section>
+
+          <section class="file-viewer" id="fileViewer" aria-label="File viewer" hidden>
+            <div class="viewer-toolbar">
+              <span id="viewerPath" class="viewer-path"></span>
+              <button id="reloadViewerButton" class="viewer-reload">再読込</button>
+            </div>
+            <div class="viewer-content" id="viewerContent"></div>
           </section>
         </section>
       </div>

@@ -1,5 +1,13 @@
 const sideTabs = document.querySelectorAll(".side-tab");
 const sidePanels = document.querySelectorAll(".side-panel");
+const editorTabsEl = document.getElementById("editorTabs");
+const sessionViewEl = document.getElementById("sessionView");
+const fileViewerEl = document.getElementById("fileViewer");
+const viewerPathEl = document.getElementById("viewerPath");
+const viewerContentEl = document.getElementById("viewerContent");
+
+const tabData = new Map([["session", { type: "session", label: "session.ai" }]]);
+let activeTabId = "session";
 
 const rootFolderName = document.getElementById("rootFolderName");
 const rootPathDisplay = document.getElementById("rootPathDisplay");
@@ -91,6 +99,197 @@ const ENGINE_CONFIG = {
   }
 };
 let activeEngine = localStorage.getItem(ENGINE_STATE_KEY) || "codex";
+
+function getFileIcon(name) {
+  const ext = (name.split(".").pop() || "").toLowerCase();
+  if (["js", "ts", "jsx", "tsx", "mjs", "cjs"].includes(ext)) return "📄";
+  if (["md", "txt", "log"].includes(ext)) return "📝";
+  if (["json", "yaml", "yml", "toml"].includes(ext)) return "📋";
+  if (["html", "htm"].includes(ext)) return "🌐";
+  if (["css", "scss", "sass"].includes(ext)) return "🎨";
+  if (["png", "jpg", "jpeg", "gif", "svg", "webp", "ico"].includes(ext)) return "🖼";
+  if (["bat", "sh", "cmd", "ps1"].includes(ext)) return "⚙";
+  return "📄";
+}
+
+async function readDirEntries(dirHandle) {
+  const entries = [];
+  for await (const [name, handle] of dirHandle.entries()) {
+    entries.push({ name, handle, kind: handle.kind });
+  }
+  entries.sort((a, b) => {
+    if (a.kind !== b.kind) return a.kind === "directory" ? -1 : 1;
+    return a.name.localeCompare(b.name, "ja");
+  });
+  return entries;
+}
+
+async function renderDirTree(containerEl, dirHandle) {
+  containerEl.innerHTML = '<div class="tree-loading">読込中...</div>';
+  let entries;
+  try {
+    entries = await readDirEntries(dirHandle);
+  } catch {
+    containerEl.innerHTML = '<div class="tree-loading">読込できませんでした</div>';
+    return;
+  }
+  containerEl.innerHTML = "";
+
+  for (const { name, handle, kind } of entries) {
+    if (kind === "directory") {
+      const wrap = document.createElement("div");
+      const row = document.createElement("button");
+      row.className = "tree-row child";
+      row.innerHTML = `<span class="twisty">▸</span><span class="tree-icon">📁</span>${escapeHtml(name)}`;
+      const subContainer = document.createElement("div");
+      subContainer.style.paddingLeft = "14px";
+      subContainer.style.display = "none";
+      let loaded = false;
+      row.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        if (subContainer.style.display === "none") {
+          subContainer.style.display = "";
+          row.querySelector(".twisty").textContent = "▾";
+          if (!loaded) {
+            loaded = true;
+            await renderDirTree(subContainer, handle);
+          }
+          openDirTab(name, handle);
+        } else {
+          subContainer.style.display = "none";
+          row.querySelector(".twisty").textContent = "▸";
+        }
+      });
+      wrap.append(row, subContainer);
+      containerEl.append(wrap);
+    } else {
+      const row = document.createElement("button");
+      row.className = "tree-row child";
+      row.innerHTML = `<span class="tree-icon">${getFileIcon(name)}</span>${escapeHtml(name)}`;
+      row.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openFileTab(name, handle);
+      });
+      containerEl.append(row);
+    }
+  }
+}
+
+function createTabEl(tabId, label) {
+  const tab = document.createElement("div");
+  tab.className = "editor-tab";
+  tab.dataset.tabId = tabId;
+  tab.setAttribute("role", "tab");
+  tab.setAttribute("tabindex", "0");
+  const labelSpan = document.createElement("span");
+  labelSpan.textContent = label;
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "tab-close";
+  closeBtn.textContent = "×";
+  closeBtn.title = "閉じる";
+  closeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeTab(tabId);
+  });
+  tab.append(labelSpan, closeBtn);
+  tab.addEventListener("click", () => activateTab(tabId));
+  tab.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") activateTab(tabId);
+  });
+  return tab;
+}
+
+function activateTab(tabId) {
+  activeTabId = tabId;
+  editorTabsEl.querySelectorAll(".editor-tab").forEach((el) => {
+    el.classList.toggle("active", el.dataset.tabId === tabId);
+  });
+  const tab = tabData.get(tabId);
+  if (!tab || tab.type === "session") {
+    sessionViewEl.hidden = false;
+    fileViewerEl.hidden = true;
+  } else {
+    sessionViewEl.hidden = true;
+    fileViewerEl.hidden = false;
+    loadTabContent(tab);
+  }
+}
+
+function closeTab(tabId) {
+  if (tabId === "session") return;
+  tabData.delete(tabId);
+  editorTabsEl.querySelector(`[data-tab-id="${tabId}"]`)?.remove();
+  if (activeTabId === tabId) activateTab("session");
+}
+
+function openFileTab(name, fileHandle) {
+  const tabId = `file:${name}`;
+  if (!tabData.has(tabId)) {
+    tabData.set(tabId, { type: "file", label: name, handle: fileHandle });
+    editorTabsEl.append(createTabEl(tabId, name));
+  } else {
+    tabData.get(tabId).handle = fileHandle;
+  }
+  activateTab(tabId);
+}
+
+function openDirTab(name, dirHandle) {
+  const tabId = `dir:${name}`;
+  if (!tabData.has(tabId)) {
+    tabData.set(tabId, { type: "dir", label: `📁 ${name}`, handle: dirHandle });
+    editorTabsEl.append(createTabEl(tabId, `📁 ${name}`));
+  } else {
+    tabData.get(tabId).handle = dirHandle;
+  }
+  activateTab(tabId);
+}
+
+async function loadTabContent(tab) {
+  viewerPathEl.textContent = tab.label;
+  viewerContentEl.innerHTML = '<div class="tree-loading">読込中...</div>';
+
+  try {
+    if (tab.type === "file") {
+      const file = await tab.handle.getFile();
+      const ext = (file.name.split(".").pop() || "").toLowerCase();
+      const imgExts = ["png", "jpg", "jpeg", "gif", "svg", "webp", "ico"];
+      if (imgExts.includes(ext)) {
+        const url = URL.createObjectURL(file);
+        const img = document.createElement("img");
+        img.src = url;
+        img.style.maxWidth = "100%";
+        img.onload = () => URL.revokeObjectURL(url);
+        viewerContentEl.innerHTML = "";
+        viewerContentEl.append(img);
+      } else {
+        const text = await file.text();
+        const pre = document.createElement("pre");
+        pre.textContent = text;
+        viewerContentEl.innerHTML = "";
+        viewerContentEl.append(pre);
+      }
+    } else if (tab.type === "dir") {
+      const entries = await readDirEntries(tab.handle);
+      viewerContentEl.innerHTML = "";
+      if (entries.length === 0) {
+        viewerContentEl.innerHTML = '<div class="tree-loading">空のフォルダです</div>';
+        return;
+      }
+      for (const { name, handle, kind } of entries) {
+        const entry = document.createElement("div");
+        entry.className = "viewer-dir-entry";
+        entry.innerHTML = kind === "directory" ? `📁 ${escapeHtml(name)}` : `${getFileIcon(name)} ${escapeHtml(name)}`;
+        entry.addEventListener("click", () => {
+          if (kind === "directory") openDirTab(name, handle);
+          else openFileTab(name, handle);
+        });
+        viewerContentEl.append(entry);
+      }
+    }
+  } catch (e) {
+    viewerContentEl.innerHTML = `<div class="tree-loading">読込エラー: ${escapeHtml(e.message)}</div>`;
+  }
+}
 
 function saveRootState() {
   const folders = Array.from(appList.querySelectorAll(".tree-item")).map((item) => ({
@@ -384,6 +583,12 @@ function selectApp(item, keepExpanded = false) {
   renderFileList();
   saveRootState();
   appendProcess("folder", `${folder} を選択しました。`);
+
+  const dirHandle = appDirectoryHandles.get(folder);
+  const childrenEl = item.querySelector(".tree-children");
+  if (dirHandle && childrenEl) {
+    renderDirTree(childrenEl, dirHandle);
+  }
 }
 
 function renderAppFolders(folders) {
@@ -625,6 +830,11 @@ githubPushButton.addEventListener("click", () => {
 localRunButton.addEventListener("click", () => {
   runOperation("local", "ローカル実行プロンプトを送信しました。既存セッション内の共通実行モジュールで起動します。");
 });
+document.getElementById("reloadViewerButton").addEventListener("click", () => {
+  const tab = tabData.get(activeTabId);
+  if (tab && tab.type !== "session") loadTabContent(tab);
+});
+editorTabsEl.querySelector('[data-tab-id="session"]').addEventListener("click", () => activateTab("session"));
 chooseRootButton.addEventListener("click", chooseRootFolder);
 reusableFileInput.addEventListener("change", handleReusableFileChange);
 folderInput.addEventListener("input", renderFileList);

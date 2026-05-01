@@ -351,8 +351,8 @@ input {
 }
 
 .editor {
-  display: grid;
-  grid-template-rows: 36px 1fr;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   min-height: 0;
   background: var(--surface);
@@ -360,11 +360,16 @@ input {
 
 .editor-tabs {
   display: flex;
+  flex-shrink: 0;
+  overflow-x: auto;
   border-bottom: 1px solid var(--line);
   background: #ececec;
 }
 
 .editor-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   min-width: 130px;
   border: 0;
   border-right: 1px solid var(--line);
@@ -373,6 +378,33 @@ input {
   padding: 9px 12px;
   text-align: left;
   box-shadow: inset 0 2px 0 var(--accent);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.editor-tab:not(.active) {
+  background: #ececec;
+  box-shadow: none;
+  color: var(--muted);
+}
+
+.tab-close {
+  border: none;
+  background: none;
+  padding: 0 2px;
+  margin-left: auto;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.tab-close:hover {
+  background: var(--line);
+  color: var(--ink);
 }
 
 .workspace {
@@ -381,6 +413,88 @@ input {
   gap: 14px;
   overflow: auto;
   padding: 18px;
+  flex: 1;
+  min-height: 0;
+}
+
+.file-viewer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.viewer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+  padding: 0 14px;
+  height: 36px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.viewer-path {
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viewer-reload {
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.viewer-reload:hover {
+  background: var(--surface-2);
+}
+
+.viewer-content {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  background: var(--surface);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.viewer-content pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.viewer-dir-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.viewer-dir-entry:hover {
+  background: var(--surface-2);
+}
+
+.tree-loading {
+  padding: 6px 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-style: italic;
 }
 
 .eyebrow {
