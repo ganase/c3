@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WHOLEI</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark">W</span>
+        <span>WHOLEI</span>
+      </div>
+      <nav aria-label="Primary">
+        <a href="#workflow">流れ</a>
+        <a href="#projects">案件</a>
+        <a href="#outputs">出力</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Obsidian-ready knowledge mapping</p>
+          <h1>フォルダ内の資料を、根拠が追えるネットワーク図と説明資料へ。</h1>
+          <p class="lead">WHOLEI は案件フォルダを作成し、Obsidian vault として初期化します。保存された関連ファイルを解析し、関係性ノート、ネットワーク図、WHOLEI.md、PPTX を生成します。</p>
+          <div class="actions">
+            <a class="button primary" href="#projects">案件を作成</a>
+            <a class="button secondary" href="#workflow">運用を見る</a>
+          </div>
+        </div>
+        <div class="hero-panel" aria-label="Network preview">
+          <div class="panel-head">
+            <span>Relationship confidence</span>
+            <strong>Traceable</strong>
+          </div>
+          <div class="network-preview">
+            <span class="node n1">source</span>
+            <span class="node n2">notes</span>
+            <span class="node n3">graph</span>
+            <span class="node n4">WHOLEI.md</span>
+            <span class="node n5">PPTX</span>
+            <svg viewBox="0 0 520 300" aria-hidden="true">
+              <line x1="118" y1="118" x2="270" y2="72"></line>
+              <line x1="118" y1="118" x2="240" y2="206"></line>
+              <line x1="270" y1="72" x2="404" y2="142"></line>
+              <line x1="240" y1="206" x2="404" y2="142"></line>
+              <line x1="404" y1="142" x2="386" y2="238"></line>
+            </svg>
+          </div>
+          <div class="assurance">
+            <span>Local folders</span>
+            <span>Obsidian links</span>
+            <span>Reviewable outputs</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="workflow" class="band">
+        <div class="section-title">
+          <p class="eyebrow">Workflow</p>
+          <h2>運用の流れ</h2>
+        </div>
+        <div class="steps">
+          <article>
+            <span>01</span>
+            <h3>案件フォルダを作成</h3>
+            <p>WHOLEI が `projects` 配下に vault を作成し、`.obsidian` 設定と `source` フォルダを用意します。</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>関連ファイルを保存</h3>
+            <p>ユーザーは `source` に議事録、仕様書、CSV、Markdown、コードなどを配置します。</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>処理開始</h3>
+            <p>共通語彙、ファイル名参照、ファイル種別から関連性を抽出し、重み付きネットワークを作ります。</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>解説資料を生成</h3>
+            <p>Obsidian ノート、`network.svg`、`WHOLEI.md`、`WHOLEI.pptx` を同じ vault に出力します。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="projects" class="workspace">
+        <div class="section-title">
+          <p class="eyebrow">Workspace</p>
+          <h2>案件管理</h2>
+        </div>
+        <form id="projectForm" class="create-row">
+          <label>
+            <span>案件名</span>
+            <input id="projectName" name="name" placeholder="例: 2026年度 監査資料整理" autocomplete="off">
+          </label>
+          <button class="button primary" type="submit">作成</button>
+        </form>
+        <div id="status" class="status" role="status"></div>
+        <div id="projectList" class="project-list"></div>
+      </section>
+
+      <section id="outputs" class="band outputs">
+        <div class="section-title">
+          <p class="eyebrow">Deliverables</p>
+          <h2>生成されるもの</h2>
+        </div>
+        <div class="output-grid">
+          <div><strong>Obsidian vault</strong><span>初期設定済みの案件フォルダ</span></div>
+          <div><strong>00_wholei_map</strong><span>Graph view でつながる関連性ノート</span></div>
+          <div><strong>network.svg</strong><span>説明に使えるネットワーク図</span></div>
+          <div><strong>WHOLEI.md</strong><span>根拠と強い関係をまとめた Markdown</span></div>
+          <div><strong>WHOLEI.pptx</strong><span>視覚的な説明用プレゼン</span></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

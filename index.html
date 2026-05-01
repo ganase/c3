@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Code Console UI</title>
+    <link rel="stylesheet" href="styles.css?v=engine-1">
+  </head>
+  <body>
+    <main class="workbench">
+      <div class="app-shell">
+        <aside class="sidebar" aria-label="Left pane">
+          <div class="side-tabs" role="tablist">
+            <button class="side-tab active" data-side-tab="folders">フォルダ</button>
+            <button class="side-tab" data-side-tab="status">ステータス</button>
+          </div>
+
+          <section class="side-panel active" id="foldersPane" aria-label="Folder pane">
+            <div class="explorer-title">FOLDER PANE</div>
+            <div class="action-stack top-actions" aria-label="Project actions">
+              <button class="primary full" id="newProjectButton">新規作成</button>
+            </div>
+            <section class="folder-pane" aria-label="Apps">
+              <div class="section-title">ROOT</div>
+              <div class="folder-header">
+                <h2 id="rootFolderName">未指定</h2>
+                <button id="chooseRootButton">指定</button>
+              </div>
+              <p class="path-display" id="rootPathDisplay">root未指定 / code-console</p>
+              <div class="section-title">APPS</div>
+              <div class="app-list" id="appList" aria-label="App folders">
+                <div class="tree-item active expanded" data-title="AI開発コンソール" data-folder="code-console">
+                  <button class="tree-row app-item">
+                    <span class="twisty">▾</span>
+                    <span class="tree-icon">📁</span>
+                    <strong>code-console</strong>
+                  </button>
+                  <div class="tree-children">
+                    <button class="tree-row child"><span class="tree-icon">📄</span> README.md</button>
+                    <button class="tree-row child"><span class="tree-icon">📄</span> DESIGN.md</button>
+                    <button class="tree-row child"><span class="tree-icon">📁</span> src</button>
+                  </div>
+                </div>
+                <div class="tree-item" data-title="予約管理アプリ" data-folder="booking-app">
+                  <button class="tree-row app-item">
+                    <span class="twisty">▸</span>
+                    <span class="tree-icon">📁</span>
+                    <strong>booking-app</strong>
+                  </button>
+                  <div class="tree-children">
+                    <button class="tree-row child"><span class="tree-icon">📄</span> README.md</button>
+                    <button class="tree-row child"><span class="tree-icon">📁</span> app</button>
+                  </div>
+                </div>
+                <div class="tree-item" data-title="フォーム確認" data-folder="form-checker">
+                  <button class="tree-row app-item">
+                    <span class="twisty">▸</span>
+                    <span class="tree-icon">📁</span>
+                    <strong>form-checker</strong>
+                  </button>
+                  <div class="tree-children">
+                    <button class="tree-row child"><span class="tree-icon">📄</span> README.md</button>
+                    <button class="tree-row child"><span class="tree-icon">📄</span> form.html</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </section>
+
+          <section class="side-panel" id="statusPane" aria-label="Status pane">
+            <div class="explorer-title">STATUS PANE</div>
+            <section class="panel compact">
+              <div class="section-title">SESSION</div>
+              <div class="status-list">
+                <div><span>Project</span><strong id="projectName">AI開発コンソール</strong></div>
+                <div><span>Status</span><strong id="projectStatus">確認待ち</strong></div>
+                <div><span>Changes</span><strong id="changeCount">4 files</strong></div>
+              </div>
+            </section>
+
+            <section class="engine-box" aria-label="Agent engine">
+              <div class="section-title">ENGINE</div>
+              <div class="engine-switch" role="tablist" aria-label="Agent engine switch">
+                <button class="engine-option active" data-engine="codex" type="button">Codex</button>
+                <button class="engine-option" data-engine="claude" type="button">Claude Code</button>
+              </div>
+              <p class="engine-status" id="engineStatus">Codex runner</p>
+            </section>
+
+            <section class="intent-summary" aria-label="Diagram summary">
+              <div class="section-title">図式化</div>
+              <div class="action-stack compact-actions">
+                <button class="full" id="generateDiagramButton">構成図を作成</button>
+              </div>
+            </section>
+
+            <section class="file-box" aria-label="Reusable files">
+              <div class="section-title">SHARED FILES</div>
+              <div class="file-actions">
+                <label class="file-picker">
+                  <input id="reusableFileInput" type="file" accept=".md,text/markdown,text/plain" multiple>
+                  <span>MDを選択</span>
+                </label>
+                <button id="saveFilesButton">保存</button>
+              </div>
+              <ul class="file-list" id="fileList">
+                <li>未選択</li>
+              </ul>
+              <p class="file-status" id="fileSaveStatus">保存先: code-console/</p>
+            </section>
+
+            <div class="action-stack" aria-label="Open actions">
+              <button class="full" id="openProjectButton">既存を開く</button>
+            </div>
+
+            <section class="repo-box" aria-label="Repository actions">
+              <div class="section-title">REPOSITORY</div>
+              <div class="action-stack compact-actions">
+                <button class="full" id="githubSettingsButton">GitHub接続設定</button>
+                <button class="full" id="githubPushButton">コードをPush</button>
+              </div>
+            </section>
+
+            <section class="run-box" aria-label="Local run actions">
+              <div class="section-title">LOCAL</div>
+              <div class="action-stack compact-actions">
+                <button class="full" id="localRunButton">ローカル実行</button>
+              </div>
+            </section>
+          </section>
+        </aside>
+
+        <section class="editor" aria-label="Editor group">
+          <div class="editor-tabs" role="tablist">
+            <button class="editor-tab active">session.ai</button>
+          </div>
+
+          <section class="workspace" aria-label="Assistant workspace">
+            <header class="workspace-header">
+              <div>
+                <p class="eyebrow">SESSION</p>
+                <h1 id="workspaceTitle">AI開発コンソール</h1>
+              </div>
+            </header>
+
+            <section class="command-box" aria-label="Prompt input">
+              <div class="form-grid">
+                <label>
+                  <span>タイトル</span>
+                  <input id="titleInput" type="text" value="AI開発コンソール">
+                </label>
+                <label>
+                  <span>フォルダ名</span>
+                  <input id="folderInput" type="text" value="code-console" pattern="[A-Za-z0-9_-]+">
+                </label>
+              </div>
+              <label for="instructionInput">プロンプト</label>
+              <textarea id="instructionInput" rows="6">トップページをもっと信頼感のあるデザインにして。</textarea>
+              <div class="command-actions">
+                <p id="commandHint">実行前に整理します。</p>
+                <button class="primary" id="runInstructionButton">プロンプトを実行</button>
+              </div>
+            </section>
+
+            <section class="process-panel" aria-label="Process output">
+              <div class="process-header">
+                <span>PROCESS</span>
+                <strong id="rootNode">code-console</strong>
+              </div>
+              <div class="process-stream" id="processStream">
+                <p><span>[ready]</span> セッションを開始しました。</p>
+                <p><span>[folder]</span> code-console を選択中です。</p>
+                <p><span>[next]</span> プロンプトを入力して実行できます。</p>
+              </div>
+            </section>
+
+            <section class="diagram-output" aria-label="System diagram">
+              <div class="process-header">
+                <span>SYSTEM DIAGRAM</span>
+                <strong>Mermaid</strong>
+              </div>
+              <pre class="mermaid-view" id="mermaidView">構成図はまだ作成されていません。</pre>
+            </section>
+          </section>
+        </section>
+      </div>
+
+      <footer class="statusbar">
+        <span>main</span>
+        <span>UTF-8</span>
+        <span>Session</span>
+        <span id="statusEngine">Codex</span>
+        <span id="statusFolder">code-console</span>
+      </footer>
+    </main>
+
+    <script src="script.js?v=engine-1"></script>
+  </body>
+</html>

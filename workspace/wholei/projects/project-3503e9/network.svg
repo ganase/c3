@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 680" width="1100" height="680">
+<rect width="100%" height="100%" fill="#fbfaf6"/>
+<text x="42" y="58" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#13252d">WHOLEI Relationship Network</text>
+<text x="42" y="90" font-family="Arial, sans-serif" font-size="16" fill="#4d626b">Generated from source folder relationships</text>
+
+<g>
+  <circle cx="550.0" cy="95.2" r="16" fill="#f6f2e8" stroke="#1e4f5f" stroke-width="3"/>
+  <text x="550.0" y="129.2" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#13252d">audit-notes.txt</text>
+</g>
+<g>
+  <circle cx="762.0" cy="462.4" r="16" fill="#f6f2e8" stroke="#1e4f5f" stroke-width="3"/>
+  <text x="762.0" y="496.4" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#13252d">requirements.md</text>
+</g>
+<g>
+  <circle cx="338.0" cy="462.4" r="16" fill="#f6f2e8" stroke="#1e4f5f" stroke-width="3"/>
+  <text x="338.0" y="496.4" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#13252d">sales.csv</text>
+</g>
+</svg>

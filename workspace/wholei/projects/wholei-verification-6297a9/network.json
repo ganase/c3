@@ -1,0 +1,98 @@
+{
+  "nodes": [
+    {
+      "id": "f70022d9f9",
+      "title": "audit-notes.txt",
+      "relative": "audit-notes.txt",
+      "ext": ".txt",
+      "words": [
+        "sales",
+        "audit-notes",
+        "txt",
+        "audit",
+        "notes",
+        "mention",
+        "data",
+        "requirements",
+        "csv",
+        "checked"
+      ],
+      "text": "﻿Audit notes mention sales data and requirements. sales.csv is checked.\r\n"
+    },
+    {
+      "id": "0e50b68ce8",
+      "title": "requirements.md",
+      "relative": "requirements.md",
+      "ext": ".md",
+      "words": [
+        "requirements",
+        "sales",
+        "nconnect",
+        "audit",
+        "notes",
+        "data",
+        "see",
+        "audit-notes",
+        "txt",
+        "csv"
+      ],
+      "text": "﻿# Requirements`nConnect audit notes and sales data. See audit-notes.txt and sales.csv.\r\n"
+    },
+    {
+      "id": "80bae4d80c",
+      "title": "sales.csv",
+      "relative": "sales.csv",
+      "ext": ".csv",
+      "words": [
+        "sales",
+        "csv",
+        "month",
+        "audit",
+        "n2026-01",
+        "checked"
+      ],
+      "text": "﻿month,sales,audit`n2026-01,1200,checked\r\n"
+    }
+  ],
+  "edges": [
+    {
+      "source": "f70022d9f9",
+      "target": "0e50b68ce8",
+      "score": 11,
+      "reason": "ファイル名参照 + 共通語彙",
+      "shared": [
+        "sales",
+        "audit-notes",
+        "txt",
+        "audit",
+        "notes",
+        "data",
+        "requirements",
+        "csv"
+      ]
+    },
+    {
+      "source": "f70022d9f9",
+      "target": "80bae4d80c",
+      "score": 7,
+      "reason": "ファイル名参照 + 共通語彙",
+      "shared": [
+        "sales",
+        "audit",
+        "csv",
+        "checked"
+      ]
+    },
+    {
+      "source": "0e50b68ce8",
+      "target": "80bae4d80c",
+      "score": 6,
+      "reason": "ファイル名参照 + 共通語彙",
+      "shared": [
+        "sales",
+        "audit",
+        "csv"
+      ]
+    }
+  ]
+}

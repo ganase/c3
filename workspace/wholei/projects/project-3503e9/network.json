@@ -1,0 +1,45 @@
+{
+  "nodes": [
+    {
+      "id": "f70022d9f9",
+      "title": "audit-notes.txt",
+      "relative": "audit-notes.txt",
+      "ext": ".txt",
+      "words": [
+        "audit-notes",
+        "txt",
+        "pptx"
+      ],
+      "text": "?????????????????PPTX????????"
+    },
+    {
+      "id": "0e50b68ce8",
+      "title": "requirements.md",
+      "relative": "requirements.md",
+      "ext": ".md",
+      "words": [
+        "requirements",
+        "obsidian",
+        "graph"
+      ],
+      "text": "# ????\n?????????????????Obsidian graph??????"
+    },
+    {
+      "id": "80bae4d80c",
+      "title": "sales.csv",
+      "relative": "sales.csv",
+      "ext": ".csv",
+      "words": [
+        "sales",
+        "csv",
+        "account",
+        "revenue",
+        "audit",
+        "alpha",
+        "beta"
+      ],
+      "text": "account,revenue,audit\nalpha,1200,????\nbeta,900,????\n"
+    }
+  ],
+  "edges": []
+}
