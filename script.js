@@ -206,11 +206,11 @@ function activateTab(tabId) {
   });
   const tab = tabData.get(tabId);
   if (!tab || tab.type === "session") {
-    sessionViewEl.hidden = false;
-    fileViewerEl.hidden = true;
+    sessionViewEl.style.display = "";
+    fileViewerEl.style.display = "none";
   } else {
-    sessionViewEl.hidden = true;
-    fileViewerEl.hidden = false;
+    sessionViewEl.style.display = "none";
+    fileViewerEl.style.display = "flex";
     loadTabContent(tab);
   }
 }
@@ -849,5 +849,6 @@ appList.querySelectorAll(".tree-item").forEach((item) => {
   });
 });
 
+fileViewerEl.style.display = "none";
 setEngine(activeEngine);
 loadRootState();
