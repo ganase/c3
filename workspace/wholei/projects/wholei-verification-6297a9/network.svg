@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 680" width="1100" height="680">
 <rect width="100%" height="100%" fill="#fbfaf6"/>
 <text x="42" y="58" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#13252d">WHOLEI Relationship Network</text>
-<text x="42" y="90" font-family="Arial, sans-serif" font-size="16" fill="#4d626b">Generated from source folder relationships / Source フォルダから生成</text>
+<text x="42" y="90" font-family="Arial, sans-serif" font-size="16" fill="#4d626b">source フォルダから生成した関連性ネットワーク</text>
 <line x1="550.0" y1="139.3" x2="726.0" y2="441.6" stroke="#52707f" stroke-width="5" opacity="0.75"/>
 <line x1="550.0" y1="139.3" x2="365.6" y2="446.5" stroke="#52707f" stroke-width="4.15" opacity="0.74"/>
 <line x1="726.0" y1="441.6" x2="365.6" y2="446.5" stroke="#52707f" stroke-width="3.7" opacity="0.66"/>

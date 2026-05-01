@@ -15,9 +15,9 @@
         "data",
         "requirements",
         "csv",
+        "is",
         "checked"
-      ],
-      "text": "﻿Audit notes mention sales data and requirements. sales.csv is checked.\r\n"
+      ]
     },
     {
       "id": "0e50b68ce8",
@@ -27,6 +27,7 @@
       "words": [
         "requirements",
         "sales",
+        "md",
         "nconnect",
         "audit",
         "notes",
@@ -35,8 +36,7 @@
         "audit-notes",
         "txt",
         "csv"
-      ],
-      "text": "﻿# Requirements`nConnect audit notes and sales data. See audit-notes.txt and sales.csv.\r\n"
+      ]
     },
     {
       "id": "80bae4d80c",
@@ -50,8 +50,7 @@
         "audit",
         "n2026-01",
         "checked"
-      ],
-      "text": "﻿month,sales,audit`n2026-01,1200,checked\r\n"
+      ]
     }
   ],
   "edges": [

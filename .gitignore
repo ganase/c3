@@ -1,1 +1,3 @@
 .claude/
+workspace/**/.tmp-pptx/
+workspace/**/.tmp-server*.log
