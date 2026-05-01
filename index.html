@@ -13,6 +13,7 @@
           <div class="side-tabs" role="tablist">
             <button class="side-tab active" data-side-tab="folders">フォルダ</button>
             <button class="side-tab" data-side-tab="status">ステータス</button>
+            <button class="side-tab" data-side-tab="settings">設定</button>
           </div>
 
           <section class="side-panel active" id="foldersPane" aria-label="Folder pane">
@@ -78,6 +79,21 @@
               </div>
             </section>
 
+            <div class="action-stack" aria-label="Open actions">
+              <button class="full" id="openProjectButton">既存を開く</button>
+            </div>
+
+            <section class="run-box" aria-label="Local run actions">
+              <div class="section-title">LOCAL</div>
+              <div class="action-stack compact-actions">
+                <button class="full" id="localRunButton">ローカル実行</button>
+              </div>
+            </section>
+          </section>
+
+          <section class="side-panel" id="settingsPane" aria-label="Settings pane">
+            <div class="explorer-title">SETTINGS</div>
+
             <section class="engine-box" aria-label="Agent engine">
               <div class="section-title">ENGINE</div>
               <div class="engine-switch" role="tablist" aria-label="Agent engine switch">
@@ -109,22 +125,11 @@
               <p class="file-status" id="fileSaveStatus">保存先: code-console/</p>
             </section>
 
-            <div class="action-stack" aria-label="Open actions">
-              <button class="full" id="openProjectButton">既存を開く</button>
-            </div>
-
             <section class="repo-box" aria-label="Repository actions">
               <div class="section-title">REPOSITORY</div>
               <div class="action-stack compact-actions">
                 <button class="full" id="githubSettingsButton">GitHub接続設定</button>
                 <button class="full" id="githubPushButton">コードをPush</button>
-              </div>
-            </section>
-
-            <section class="run-box" aria-label="Local run actions">
-              <div class="section-title">LOCAL</div>
-              <div class="action-stack compact-actions">
-                <button class="full" id="localRunButton">ローカル実行</button>
               </div>
             </section>
           </section>
