@@ -1,4 +1,4 @@
-# Code Console UI
+# Codex and Claude Code Console
 
 CLIベースのAI開発ツールを、ブラウザで扱うためのプロトタイプです。
 
