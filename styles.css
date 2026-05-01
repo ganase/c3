@@ -37,7 +37,7 @@ input {
 }
 
 .titlebar {
-  background: #dc143c;
+  background: var(--accent);
   color: white;
   font-size: 10pt;
   font-weight: 700;
@@ -333,20 +333,20 @@ input {
 }
 
 #runInstructionButton {
-  border-color: #dc143c;
-  background: #dc143c;
+  border-color: var(--accent);
+  background: var(--accent);
   color: white;
   font-weight: 700;
 }
 
 #runInstructionButton:hover {
-  background: #a50e2d;
-  border-color: #a50e2d;
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
 }
 
 #runInstructionButton.awaiting-choice {
-  border-color: #c0392b;
-  background: #c0392b;
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
 }
 
 .process-stream .choice-line {
