@@ -35,6 +35,44 @@ const statusEngine = document.getElementById("statusEngine");
 let reusableFiles = [];
 let rootDirectoryHandle = null;
 const appDirectoryHandles = new Map();
+let awaitingChoice = false;
+let recentOutputLines = [];
+const CHOICE_PATTERN = /^\s*\d+[.)]\s+\S/;
+
+function detectChoices(lines) {
+  const choiceLines = lines.filter((line) => CHOICE_PATTERN.test(line));
+  return choiceLines.length >= 2 ? choiceLines : null;
+}
+
+function appendChoiceBlock(choices) {
+  choices.forEach((choice) => {
+    const line = document.createElement("p");
+    line.className = "choice-line";
+    const label = document.createElement("span");
+    label.textContent = "[choice]";
+    line.append(label, ` ${choice.trim()}`);
+    processStream.append(line);
+  });
+  processStream.scrollTop = processStream.scrollHeight;
+}
+
+function enterChoiceMode(choices) {
+  awaitingChoice = true;
+  appendChoiceBlock(choices);
+  appendProcess("choice", "番号を入力して「プロンプトを実行」を押してください");
+  commandHint.textContent = "番号を入力して選択してください。例: 1";
+  instructionInput.value = "";
+  instructionInput.placeholder = "例: 1";
+  instructionInput.focus();
+  document.getElementById("runInstructionButton").classList.add("awaiting-choice");
+}
+
+function exitChoiceMode() {
+  awaitingChoice = false;
+  recentOutputLines = [];
+  instructionInput.placeholder = "";
+  document.getElementById("runInstructionButton").classList.remove("awaiting-choice");
+}
 const STATUS_FRAMES = ["●〇〇〇", "〇●〇〇", "〇〇◎〇", "〇〇〇✕"];
 let statusAnimationTimer = null;
 let statusAnimationIndex = 0;
@@ -256,7 +294,18 @@ async function executeCli(prompt) {
         }
 
         if (message.type === "stdout") {
-          message.text.split(/\r?\n/).filter(Boolean).forEach((outputLine) => appendProcess("out", outputLine));
+          const outputLines = message.text.split(/\r?\n/).filter(Boolean);
+          outputLines.forEach((outputLine) => {
+            appendProcess("out", outputLine);
+            recentOutputLines.push(outputLine);
+            if (recentOutputLines.length > 30) recentOutputLines.shift();
+          });
+          if (!awaitingChoice) {
+            const choices = detectChoices(recentOutputLines);
+            if (choices) {
+              enterChoiceMode(choices);
+            }
+          }
           return;
         }
 
@@ -272,6 +321,9 @@ async function executeCli(prompt) {
         if (message.type === "close") {
           stopStatusAnimation(message.ok ? "CLI 完了" : "CLI エラー");
           changeCount.textContent = message.ok ? "updated" : "check log";
+          if (!awaitingChoice) {
+            recentOutputLines = [];
+          }
         }
       });
     }
@@ -449,6 +501,7 @@ async function runInstruction() {
   }
 
   projectName.textContent = title || "新規";
+  exitChoiceMode();
   startStatusAnimation(`${engine.label} 確認中`);
   changeCount.textContent = "確認中";
   commandHint.textContent = "処理を開始しました。";
